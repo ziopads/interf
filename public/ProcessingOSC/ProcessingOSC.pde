@@ -33,21 +33,35 @@
 
 
 
+
 import org.openkinect.processing.*;
+import oscP5.*;
+import netP5.*;
+
+OscP5 oscP5;
+NetAddress myRemoteLocation;
 ParticleSystem ps;
 
 Kinect2 kinect2;
 
 PImage img;
 
+boolean isConnected;
+
 // SETUP /////////////////////////////////
 void setup() {
-  size(displayWidth, displayHeight);
+  //size(displayWidth, displayHeight);
+  size(512, 424);
+
   kinect2 = new Kinect2(this);
   kinect2.initDepth();
   kinect2.initDevice();
   img = createImage(kinect2.depthWidth, kinect2.depthHeight, RGB);
   ps = new ParticleSystem(new PVector(width/2,50));
+  
+    oscP5 = new OscP5(this, 8000);
+  myRemoteLocation = new NetAddress("127.0.0.1", 12000);
+  
   // Blank image
   //depthImg = new PImage(kinect2.depthWidth, kinect2.depthHeight);
 }
@@ -101,5 +115,11 @@ void draw() {
 // Add particle system and make it track the centroid
   ps.addParticle(avgX, avgY);
   ps.run();
+  
+// send coordinate data over OSC
+  OscMessage myMessage = new OscMessage("/test");
+  myMessage.add(avgX);
+  myMessage.add(avgY);
+  oscP5.send(myMessage, myRemoteLocation);
 } 
   

@@ -1,7 +1,7 @@
 var x, y;
 
 function setup() {
-	createCanvas(1200, 1200);
+	createCanvas(512, 424);
 	setupOsc(12000, 3334);
 }
 
