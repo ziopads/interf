@@ -34,6 +34,7 @@
 
 
 import org.openkinect.processing.*;
+ParticleSystem ps;
 
 Kinect2 kinect2;
 
@@ -48,7 +49,7 @@ void setup() {
   kinect2.initDepth();
   kinect2.initDevice();
   img = createImage(kinect2.depthWidth, kinect2.depthHeight, RGB);
-
+  ps = new ParticleSystem(new PVector(width/2,50));
   // Blank image
   //depthImg = new PImage(kinect2.depthWidth, kinect2.depthHeight);
 }
@@ -103,6 +104,9 @@ void draw() {
   float avgY = sumY / totalPixels;
   fill(150, 0, 150);
   ellipse(avgX, avgY, 64, 64);
+  
+  ps.addParticle(avgX, avgY);
+  ps.run();
   
   
 
