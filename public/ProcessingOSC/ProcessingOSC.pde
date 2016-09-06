@@ -40,11 +40,9 @@ Kinect2 kinect2;
 
 PImage img;
 
-// What is the kinect's angle
-//float angle;
-
+// SETUP /////////////////////////////////
 void setup() {
-  size(512, 424);
+  size(displayWidth, displayHeight);
   kinect2 = new Kinect2(this);
   kinect2.initDepth();
   kinect2.initDevice();
@@ -54,23 +52,17 @@ void setup() {
   //depthImg = new PImage(kinect2.depthWidth, kinect2.depthHeight);
 }
 
-
-// Depth image
-//PImage depthImg;
-
-// Which pixels do we care about?
+// Threshold variables
 int minDepth =  5;
 int maxDepth =  700; //4.5m
 
+// DRAWING ///////////////////////////////
 void draw() {
   background(0);
   
   img.loadPixels();
   // Draw the raw image
   image(kinect2.getDepthImage(), 0, 0);
-  
-  // skip factor
-  int skip = 4;
 
   // Threshold the depth image
   int[] depth = kinect2.getRawDepth();
@@ -97,6 +89,7 @@ void draw() {
     }
   }
   
+  //img.resize(width, height);
   img.updatePixels();
   image(img, 0, 0);
   
@@ -105,10 +98,8 @@ void draw() {
   fill(150, 0, 150);
   ellipse(avgX, avgY, 64, 64);
   
+// Add particle system and make it track the centroid
   ps.addParticle(avgX, avgY);
   ps.run();
-  
-  
-
 } 
   
