@@ -50,8 +50,9 @@ boolean isConnected;
 
 // SETUP /////////////////////////////////
 void setup() {
-  //size(displayWidth, displayHeight);
-  size(512, 424);
+  size(displayWidth, displayHeight, P2D);
+  //size(512, 424, P2D);
+  //smooth(8); // Per processing docs, may or may not work depending on graphics processor
 
   kinect2 = new Kinect2(this);
   kinect2.initDepth();
@@ -72,11 +73,17 @@ int maxDepth =  700; //4.5m
 
 // DRAWING ///////////////////////////////
 void draw() {
+  //imageMode(CENTER);
   background(0);
-  
+ 
+  //image(img, width/2, height/2);
+
+  // put the image pixels into a pixel array
   img.loadPixels();
+  
   // Draw the raw image
-  image(kinect2.getDepthImage(), 0, 0);
+  image(kinect2.getDepthImage(), width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight, 1024, 848); // I don't think I need this anymore
+
 
   // Threshold the depth image
   int[] depth = kinect2.getRawDepth();
@@ -105,10 +112,14 @@ void draw() {
   
   //img.resize(width, height);
   img.updatePixels();
-  image(img, 0, 0);
+  //scale(2.0);
+  //image(img, width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight);
+  image(img, width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight, 1024, 848);
+
+  //image(img, 0, 0);
   
-  float avgX = sumX / totalPixels;
-  float avgY = sumY / totalPixels;
+  float avgX = 2 * sumX / totalPixels + width/2 - kinect2.depthWidth;
+  float avgY = 2 * sumY / totalPixels + height/2 - kinect2.depthHeight;
   fill(150, 0, 150);
   ellipse(avgX, avgY, 64, 64);
   
