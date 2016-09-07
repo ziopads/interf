@@ -261,7 +261,7 @@ var v1 = 110;
 function receiveOsc(address, value) {
 	console.log("received OSC: " + address + ", " + value);
 	if (address == '/kinect') {
-		v1 = value[0]/512;
+		v1 = value[0]/2560;
 		console.log("v1: " + v1);
 		console.log("Y: " + value[1]);
 		// y = value[1];
