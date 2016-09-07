@@ -54,12 +54,17 @@ void setup() {
   //size(512, 424, P2D);
   //smooth(8); // Per processing docs, may or may not work depending on graphics processor
 
+  // Handle Kinect setup
   kinect2 = new Kinect2(this);
   kinect2.initDepth();
   kinect2.initDevice();
   img = createImage(kinect2.depthWidth, kinect2.depthHeight, RGB);
   ps = new ParticleSystem(new PVector(width/2,50));
   
+  // Handle Twitter API stream setup
+  openTwitterStream();
+  
+  // Handle OSC setup
   oscP5 = new OscP5(this, 8000);
   myRemoteLocation = new NetAddress("127.0.0.1", 12009);
   
