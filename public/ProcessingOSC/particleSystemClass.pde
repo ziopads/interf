@@ -23,8 +23,8 @@ class ParticleSystem {
     particles = new ArrayList<Particle>();
   }
 
-  void addParticle(float x, float y) {
-    particles.add(new Particle(x, y));
+  void addParticle(float x, float y, String tweet) {
+    particles.add(new Particle(x, y, tweet));
   }
 
   void run() {

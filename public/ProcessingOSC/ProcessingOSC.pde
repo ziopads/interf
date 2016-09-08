@@ -48,6 +48,8 @@ PImage img;
 
 boolean isConnected;
 
+String tweet;
+
 // SETUP /////////////////////////////////
 void setup() {
   size(displayWidth, displayHeight, P2D);
@@ -76,10 +78,13 @@ void setup() {
 int minDepth =  5;
 int maxDepth =  700; //4.5m
 
+float avgX;
+float avgY;
+
 // DRAWING ///////////////////////////////
 void draw() {
   //imageMode(CENTER);
-  background(0);
+  background(20);
  
   //image(img, width/2, height/2);
 
@@ -87,7 +92,7 @@ void draw() {
   img.loadPixels();
   
   // Draw the raw image
-  image(kinect2.getDepthImage(), width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight, 1024, 848); // I don't think I need this anymore
+  //image(kinect2.getDepthImage(), width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight, 1024, 848); // I don't think I need this anymore
 
 
   // Threshold the depth image
@@ -103,33 +108,40 @@ void draw() {
       int d = depth[offset];
       
       if (d > minDepth && d < maxDepth){
-        img.pixels[offset] = color(255, 0, 150);
+        img.pixels[offset] = color(255, 22, 95);
         
         sumX += x;
         sumY += y;
         totalPixels++;
         
       } else  {
-        img.pixels[offset] = color(0);
+        img.pixels[offset] = color(20);
       }
     }
   }
   
   //img.resize(width, height);
   img.updatePixels();
-  //scale(2.0);
+  // Unscaled image
   //image(img, width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight);
+  // Scaled image
   image(img, width/2 - kinect2.depthWidth, height/2 - kinect2.depthHeight, 1024, 848);
 
   //image(img, 0, 0);
-  
-  float avgX = 2 * sumX / totalPixels + width/2 - kinect2.depthWidth;
-  float avgY = 2 * sumY / totalPixels + height/2 - kinect2.depthHeight;
+ 
+  // Unscaled averages
+  //float avgX = 2 * sumX / totalPixels;
+  //float avgY = 2 * sumY / totalPixels;
+  // Scaled averages
+  //float avgX = 2 * sumX / totalPixels + width/2 - kinect2.depthWidth;
+  //float avgY = 2 * sumY / totalPixels + height/2 - kinect2.depthHeight;
+  avgX = 2 * sumX / totalPixels + width/2 - kinect2.depthWidth;
+  avgY = 2 * sumY / totalPixels + height/2 - kinect2.depthHeight;
   fill(150, 0, 150);
   ellipse(avgX, avgY, 64, 64);
   
 // Add particle system and make it track the centroid
-  ps.addParticle(avgX, avgY);
+  ps.addParticle(avgX, avgY, tweet);
   ps.run();
   
 // send coordinate data over OSC

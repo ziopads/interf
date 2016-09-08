@@ -257,13 +257,15 @@ function setup() {
 }
 
 var v1 = 110;
+var v2 = 110;
 
 function receiveOsc(address, value) {
-	console.log("received OSC: " + address + ", " + value);
+// 	console.log("received OSC: " + address + ", " + value);
 	if (address == '/kinect') {
-		v1 = value[0]/2560;
-		console.log("v1: " + v1);
-		console.log("Y: " + value[1]);
+		v1 = (value[0]-770)/1016;
+		v2 = 1 - ((value[1]-300)/716);
+		// console.log("v1: " + v1);
+		console.log("v2: " + v2);
 		// y = value[1];
 	}
 }
@@ -275,7 +277,7 @@ function draw() {
 	
 	// send these over OSC to AbletonOSC after you've selected 8 parameters to modify
 	if (isConnected) {
-		socket.emit('message', ['/wek/outputs', v1]);
+		socket.emit('message', ['/wek/outputs', v1, v2]);
 	}
 }
 
